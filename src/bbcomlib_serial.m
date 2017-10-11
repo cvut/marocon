@@ -12,10 +12,12 @@ classdef bbcomlib_serial < handle
 %     writeline       .. Write a line to COM port.
 %     settimeout      .. Set COM port read timeout.
 %     flush           .. Flush reading and writing on COM port.
+%     query           .. Queries unit with given parameter
 %
 %   Static methods:
 %     reset           .. Try to close and free all COM ports in use.
 
+% (c) 2017, Petrova Olga
 % (c) 2008-04, Pavel Krsek
 % (c) 2010-01, Martin Matousek
 % Last change: $Date:: 2010-02-17 17:51:32 +0100 #$
@@ -31,6 +33,11 @@ end
 
 properties (SetAccess = private, GetAccess = private )
   handle  % COM port handle (Matlab's serial port object)
+end
+
+properties
+  coordmv_commands_to_next_check  % property needed for coordmv 
+  % throttle fnc due to limited capacity of command queue
 end
 
 methods( Static )
@@ -67,7 +74,7 @@ function s = bbcomlib_serial()
 %  
 %   s = comlib_serial
 
-s.verbose = 0;
+s.verbose = 1;
 
 end % fcn
 
@@ -102,6 +109,8 @@ s.handle = serial( robot.portname );
 s.timeout = [];
 
 set( s.handle, 'FlowControl', 'hardware' );
+
+s.coordmv_commands_to_next_check = 0;
 
 % Added by Pavel Krsek - Apr 2008
 % Robot Bosch works with 9600 baud
@@ -224,6 +233,28 @@ end
 end % fcn
 
 % ------------------------------------------------------------------------------
+function responce = query( s, q )
+%BBQUERY Query the control unit
+%
+%   Function queries the control unit and returns
+%   a responce
+%
+%   responce = bbquery( com )
+
+s.writeline(['\n' q '?\n']);
+
+while true
+    buf = s.readline;
+    i = strfind(buf, [q, '=']);
+    if isempty(i)
+        continue
+    end
+    j = strfind(buf, [13, 10]);
+    responce = buf((i)+length(q)+1:j-1);
+    break
+end
+end
+
 
 end % meths
 

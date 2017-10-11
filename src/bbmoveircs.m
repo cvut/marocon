@@ -93,14 +93,9 @@ t = robot.com.timeout;
 robot.com.settimeout( 10 );
 while (full ~= 0)
     robot.com.flush;
-    robot.com.writeline( 'ST?' );
-    status = robot.com.readline;
-    [command, value] = strtok(status, '=');
-    if isempty(value)
-      error(['bbmoveircs: unexpected response: "',status,'"']);
-    end
-    % strip '=' and take 7th bit corresponding buffer status
-    p = dec2bin(eval(value(2:size(value,2))),8);
+    value = robot.com.query('ST');
+    % take 7th bit corresponding buffer status
+    p = dec2bin(eval(value),8);
     full = eval(p(length(p)-8+1)) > 0;
 end
 robot.com.settimeout( t );

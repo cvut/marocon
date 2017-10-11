@@ -9,6 +9,7 @@ function angles = bbgetirc( robot )
 %   Output:
 %     angles .. joint coordinates in IRC units for all axes.
 
+% (c) 2017, Petrova Olga
 % (c) 2001-01, Ondrej Certik
 % (c) 2008-05, Pavel Krsek
 % (c) 2010-01, Martin Matousek
@@ -17,21 +18,11 @@ function angles = bbgetirc( robot )
 
 robot.com.flush;
 
-for i = 1:robot.DOF
-  if( robot.activemotors(i) ~= ' ' )
-    robot.com.writeline( [ 'AP' robot.activemotors(i) '?:' ] );
-  end
-end
-
 angles = NaN( 1, robot.DOF );
 
 for i = 1:robot.DOF
   if( robot.activemotors(i) ~= ' ' )
-    string = robot.com.readline;
-    if( length(string) < 7 || ...
-        ~isequal( string(1:4), [ 'AP' robot.activemotors(i) '=' ] ) )
-      error( 'Unexpected response from ''AP'' command: ''%s''.', string );
-    end
-    angles(i) = str2double( string(5:end-2) );
+    string = robot.com.query(['AP' robot.activemotors(i)]);
+    angles(i) = str2double( string );
   end
 end
