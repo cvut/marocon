@@ -1,46 +1,45 @@
-function [r]=bbmovex(robot,pos,angles)
-%[r]=bbmovex(robot,pos,angles) Presune robota do pozice 'pos' (=[Point,Alpha,A,T]).
-%   Dle robot.Pose: 
-%       0 ..... vybere reseni, ktere je "nejblize" pozici angles (bere se absolutni rozdil mezi 
-%               pozicemi u motoru C,D,E a F). Pokud bbmovex ma jen prvni dva parametry, bere se
-%               v angles aktualni poloha robota.
-%       1-4 ... vybere prislusne reseni, viz IKTMAT (pokud reseni nelze dosahnout, bere se nejblizsi reseni)
+function [r, irc]=bbbestpos(rob, pos, prev_pos)
+%BBBESTPOS Finds position with closest configuration to current position.
+%   
+%   [r, irc]=bbbestpos(robot, pos, prev_pos)
+%   
+%   Finds position with closest configuration to current position based 
+%   on distance in joint space.
 %
-%   pokud pozice lze dosahnout, r = 1, jinak 0
-if robot.pose == 0
-   if nargin == 2
-      angles=bbirctodeg(robot,bbgetirc(robot));
-   end
-   [a,InfinitelyMany]=bbiktred(robot,pos);
-   if isempty(a)
-      r = 0;
-      return
-   else
-      r = 1;
-   end
-   if InfinitelyMany
-      a(1,6) = angles(6);
-      bbmoveirc(robot,bbdegtoirc(robot,a(1,:)));
-   else
-      for i = 1:size(a,1),
-         b(i)=abs(a(i,3)-angles(3))+abs(a(i,4)-angles(4))+abs(a(i,5)-angles(5))+abs(a(i,6)-angles(6));
-      end
-      [x,i]=min(b);
-      bbmoveirc(robot,bbdegtoirc(robot,a(i,:)));
-   end
+%   Input:
+%     robot    .. robot control structure.
+%     pos      .. desired position
+%     prev_pos .. previous position
+%
+%   Output:
+%     r        .. indicates whether position is reacheble or not
+%     irc      .. ircs of desired position in best configuration
+
+%   (c) Petrova Olga, 2017
+
+if nargin < 3
+    prev_pos = bbdegtoirc(rob,rob.shdeg);
+end
+
+angles = bbiktred(rob, pos);
+ircs = bbdegtoirc(rob,angles);
+
+if isempty(angles)
+    r = 0;
+    return;
 else
-   [a,InfinitelyMany]=bbikt(robot,pos);
-   if isempty(a)
-      r = 0;
-      return
-   else
-      r = 1;
-   end
-   if InfinitelyMany
-      bbmoveirc(robot,bbdegtoirc(robot,a(1,:)));
-   elseif bbcheckirc(robot,bbdegtoirc(robot,a(robot.pose,:)))
-      bbmoveirc(robot,bbdegtoirc(robot,a(robot.pose,:)));
-   else
-      r=0;
-   end
+    r = 1;
+end
+
+min_dist = Inf;
+a = [];
+
+for i=1:size(ircs,1)
+    dist = norm(prev_pos - ircs(i,:));
+    if dist < min_dist
+        min_dist = dist;
+        a = ircs(i,:);
+    end
+end
+irc = a;
 end

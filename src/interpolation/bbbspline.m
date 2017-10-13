@@ -65,25 +65,7 @@ end
 
 lst = lst(:,2:end);
 lst = reshape(lst', [order, dim, n-order]);
-param = reshape(lst,[order*dim, n-order])';
-
-plot(x(1,:),x(2,:));
-hold on
-xn = 0:0.01:1;
-if order == 2
-    xns = [ xn;xn.^2;];
-else
-    xns = [xn; xn.^2;xn.^3];
-end
-xd = x(1,1);
-yd = x(2,1);
-for m = 1:size(param,1)
-    x = param(m,1:order)*xns + xd ;
-    y = param(m,order+1:end)*xns +yd;
-    xd = x(end);
-    yd = y(end);
-    plot(x, y, 'linewidth', 1.5);
-end
+params = reshape(lst,[order*dim, n-order])';
 
 end
 

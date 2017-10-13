@@ -23,4 +23,4 @@ end
 
 n = size( a, 1 );
 b = ( a - repmat( robot.hhdeg, n, 1 ) ) .* repmat( robot.degtoirc, n, 1 ) + ...
-    repmat( robot.hhirc, n, 1 )
+    repmat( robot.hhirc, n, 1 );
