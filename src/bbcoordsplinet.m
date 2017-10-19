@@ -2,7 +2,7 @@ function bbcoordsplinet( robot, param, order, t )
 %BBCOORDSPLINET  Coordinated robot motion along spline with given
 %parameters.
 %
-%   bbcoordsplinet( param, order, t, disc )
+%   bbcoordsplinet( param, order, t )
 %
 %   Robot moves along a spline in joint cordinates. For every axis (A) its  
 %   position is given by an equation:
@@ -21,7 +21,7 @@ function bbcoordsplinet( robot, param, order, t )
 %
 %    order   .. order of polynomial
 %
-%    t .. see BBMOVEIRCS.
+%    t       .. see BBMOVEIRCS.
 %
 % (c) 2017-10-10, Petrova Olga
 

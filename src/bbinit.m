@@ -136,6 +136,8 @@ else
     end
 end
 
+    bbsetupcoord(robot, robot.activemotors);
+
 if( robot.verbose )
     fprintf( 'Init finished.\n' )
 end

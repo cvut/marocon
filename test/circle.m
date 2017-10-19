@@ -4,13 +4,14 @@
 
 %% Initialization and 
 
-% addpath ../src
-% addpath ../src/interpolation
-% 
+addpath ../src
+addpath ../src/interpolation
+addpath ../test
+
 % tty_dev = 'COM3';
 % rob = bbopen('CRS93', tty_dev);
 % rob = bbinit(rob);
-bbsetupcoord( rob );
+% bbsetupcoord( rob );
 % bbwaitforready(rob);
 
 %% Trajectory sampling
