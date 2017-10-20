@@ -40,6 +40,10 @@ properties
   % throttle fnc due to limited capacity of command queue
 end
 
+properties
+  stamp  % time stamp used for synchronization
+end
+
 methods( Static )
 
 % ------------------------------------------------------------------------------
@@ -111,6 +115,7 @@ s.timeout = [];
 set( s.handle, 'FlowControl', 'hardware' );
 
 s.coordmv_commands_to_next_check = 0;
+s.stamp = round(mod((now*1e7),hex2dec('7FFF')));
 
 % Added by Pavel Krsek - Apr 2008
 % Robot Bosch works with 9600 baud
@@ -131,6 +136,8 @@ fopen( s.handle );  % open serial port
 if( strcmp( s.handle.Status, 'closed' ) ) % TODO udelat positivni test
   error( 'The specified port cannot be open' ); 
 end
+
+s.synccmdfifo;
 
 end % fcn
 
@@ -232,7 +239,7 @@ end
 
 end % fcn
 
-% ------------------------------------------------------------------------------
+% -------------------------------------------------------------------------
 function responce = query( s, q )
 %BBQUERY Query the control unit
 %
@@ -241,7 +248,7 @@ function responce = query( s, q )
 %
 %   responce = bbquery( com )
 
-s.writeline(['\n' q '?\n']);
+s.writeline([10, q, '?']);
 
 while true
     buf = s.readline;
@@ -253,8 +260,39 @@ while true
     responce = buf((i)+length(q)+1:j-1);
     break
 end
-end
+end % fcn
+% -------------------------------------------------------------------------
+function synccmdfifo( s )
+%BBSYNCCMDFIFO  Syncronization of unit with program.
+%
+%   bbsynccmdfifo( robot )
+%
+%   Sends a time stamp to unit and waits until it returns.  
+%
+%   Parameters are 
+%
+%  Input:
+%    robot  .. robot control structure
+%
+% (c) 2017-10-10, Petrova Olga
 
+
+s.stamp = mod((s.stamp + 1),hex2dec('7FFF'));
+s.writeline(['STAMP:',num2str(s.stamp)]);
+
+while true
+    buf = s.readline;
+    i = strfind(buf, 'STAMP=');
+    if isempty(i)
+        continue
+    end
+    j = strfind(buf, [13, 10]);
+    resp = buf((i)+6:j-1);
+    if str2num(resp) == s.stamp
+        break;
+    end
+end
+end % fcn
 
 end % meths
 

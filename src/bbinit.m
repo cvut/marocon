@@ -48,6 +48,7 @@ robot.com.settimeout( 5 ); % set timeout in seconds
 robot.com.writeline( 'ECHO:0' );
 pause(0.1); % wait until controller answers.
 robot.com.flush;
+robot.com.synccmdfifo;
 
 if( isfield( robot, 'REGPWRON' ) )
     robot.com.writeline( 'REGPWRON:%i', robot.REGPWRON );
