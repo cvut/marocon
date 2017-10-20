@@ -11,8 +11,8 @@ addpath ../test
 % tty_dev = 'COM3';
 % rob = bbopen('CRS93', tty_dev);
 % rob = bbinit(rob);
-% bbsetupcoord( rob );
-% bbwaitforready(rob);
+bbsetupcoord( rob );
+bbwaitforready(rob);
 
 %% Trajectory sampling
 clc
@@ -25,9 +25,9 @@ step = 10; % step of sampling in degs
 pos = [x0, y0 + r, z0, 0, 0, 0];
 [~, prev_a] = bbmovex(rob, pos);
 sol = [];
-rng = (360+step) / step;
+rng = (360) / step;
 poss = [];
-for i = 1:rng
+for i = 0:rng
     y = y0 + r * cos((i * step) / 180 * pi);
     z = z0 + r * sin((i * step) / 180 * pi);
     pos = [x0, y, z, 0, 0, 0];
@@ -59,14 +59,17 @@ else
 end
 
 x0 = sol(1,:);
+xall = [];
 for m = 1:size(params,1)
+    xc = [];
     for i=0:rob.DOF-1
         x = params(m,(i*order+1):(i*order+order))*xns + x0(i+1) ;
         x0(i+1) = x(end);
-        plot(xn+m, x,'linewidth',1.5);
+        xc = [xc;x];
     end
+    xall = [xall,xc];
 end
-
+plot(linspace(1,length(sol), length(xall)), xall,'linewidth',1.5);
 
 %% Move to the starting position
 pos = [500, y0 + r, z0, 0, 0, 0];

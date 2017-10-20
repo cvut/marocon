@@ -15,7 +15,7 @@ function bbcoordmvtirc( robot, irc, t )
 % (c) 2017-10-10, Petrova Olga
 
 if length(irc) ~= robot.DOF
-    error( 'Wrong number of parameters (%d, should be %d).', length(param), robot.DOF*order );
+    error( 'Wrong number of parameters (%d, should be %d).', length(irc), robot.DOF*order );
 end
 
 if nargin < 3
@@ -23,7 +23,7 @@ if nargin < 3
 end
 
 bbthcoordm(robot);
-str = [num2str(t), sprintf(',%0d',round(param))];
+str = [num2str(t), sprintf(',%0d',round(irc))];
 robot.com.writeline( ['COORDMVT:',str]);
 end
 

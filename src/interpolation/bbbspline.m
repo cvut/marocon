@@ -66,6 +66,6 @@ end
 lst = lst(:,2:end);
 lst = reshape(lst', [order, dim, n-order]);
 params = reshape(lst,[order*dim, n-order])';
-
+params = bbparamcorr(x(:,1)',params,order);
 end
 

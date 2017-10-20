@@ -66,6 +66,7 @@ for i=1:num_seg
    c = reshape(c(:,2:end)',[1,order*dim]);
    params = [params;c];
 end
+params = bbparamcorr(x(1,:),params,order);
 end
 
 function [a, step] = pspline(t, tl, tr, ndx, bdeg, pord, lam, x)

@@ -32,7 +32,7 @@ A = full(gallery('tridiag',n,1,4,1));
 v1ton = A\b;
 v = [v0; v1ton; vn];
 
-k0 = [zeros(1,dim); x(2) - x(1) - v0; v0; x(1,:)];
+k0 = [zeros(1,dim); x(2,:) - x(1,:) - v0; v0; x(1,:)];
 kn = [zeros(1,dim); x(end,:) - x(end-1,:) - v(end-1,:); v(end-1,:); x(end-1,:)];
 
 A = 2 * x(2:end-1,:) - 2 * x(3:end,:) + v(3:end,:) + v(2:end-1,:);
@@ -51,6 +51,6 @@ for i=1:n+1
     param = reshape(param, [1, dim*3]);
     params = [params;param];
 end
-
+params = bbparamcorr(x(1,:),params,3);
 end
 

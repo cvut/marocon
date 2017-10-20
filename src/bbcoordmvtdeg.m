@@ -15,7 +15,7 @@ function bbcoordmvtdeg( robot, deg, t )
 % (c) 2017-10-10, Petrova Olga
 
 if length(deg) ~= robot.DOF
-    error( 'Wrong number of parameters (%d, should be %d).', length(param), robot.DOF*order );
+    error( 'Wrong number of parameters (%d, should be %d).', length(deg), robot.DOF*order );
 end
 
 if nargin < 3
