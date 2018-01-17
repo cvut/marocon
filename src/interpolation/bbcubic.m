@@ -18,7 +18,7 @@ function params = bbcubic( x )
 [n, dim] = size(x);
 
 v0 = (4 * x(2,:) - 3 * x(1,:) - x(3,:)) / 2;
-vn = (4 * x(end-1,:) - 3 * x(end-2,:) - x(end,:)) / 2;
+vn = (-4 * x(end-1,:) + x(end-2,:) +3* x(end,:)) / 2;
 
 b = -3 * x(2:end-3,:) + 3 * x(4:end-1,:);
 b0 = -3 * x(1,:) + 3 * x(3,:) - v0;

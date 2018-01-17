@@ -129,4 +129,14 @@ robot.gripper_REGD = 100;
 robot.gripper_poll_time = 0.2;
 robot.gripper_poll_diff = 50;
 
+% DH notation
+robot.offset = [        0;      270;       90;        0;        0;                          0]/180*pi;
+robot.sign   = [        1;        1;        1;        1;        1;                          1];
+robot.d      = [ robot.L1;        0;        0; robot.L3;        0; robot.L4+robot.L5+robot.L6];
+robot.a      = [        0; robot.L2;        0;        0;        0;                          0];
+robot.alpha  = [       90;        0;      270;       90;      270;                          0]/180*pi;
+robot.base = eye(4);
+robot.tool = [cos(-pi/2) 0 sin(-pi/2) 0; 0 1 0 0; -sin(-pi/2) 0 cos(-pi/2) 0; 0 0 0 1];
+
 robot.ikt =  @(r, v) robCRSikt(r, v);
+robot.dkt =  @(r, v) robCRSdkt(r, v);
