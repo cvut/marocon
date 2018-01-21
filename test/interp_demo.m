@@ -6,9 +6,10 @@
 
 tty_dev = 'COM3';
 rob = bbopen('CRS93', tty_dev);
-% rob = bbinit(rob);
-% bbsetupcoord( rob );
-% bbwaitforready(rob);
+rob = bbinit(rob);
+% necessary step for spline movement
+bbsetupcoord( rob );
+bbwaitforready(rob);
 
 %% 1st step: Creatimg a parametrized trajectory
 
