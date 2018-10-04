@@ -15,7 +15,7 @@ robot.DOF = 1;
 robot.activemotors = 'A';
 robot.hhirc = [0]; 
 robot.hhdeg = [0];
-robot.degtoirc = [1];
+robot.degtoirc = [1]; 
 
 % Robot bounds in IRC
 robot.bound = [-106
