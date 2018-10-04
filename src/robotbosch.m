@@ -75,7 +75,7 @@ robot.controller = 'MARS8';
 
 robot.ikt = @(r,p) robboschikt(r,p);
 
-robot.portname='COM2'; % corrected from COM4  26.3.2013 by Smutny
+robot.portname='/dev/ttyUSB0'; % corrected from COM4  26.3.2013 by Smutny
 robot.BaudRate=19200; % Comport baud rate (default 19200 baud)
 
 

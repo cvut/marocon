@@ -10,7 +10,7 @@ function robot = robCRScommon( robot )
 % Last change: $Date:: 2010-02-17 17:51:32 +0100 #$
 %              $Revision: 2 $
 
-robot.portname='COM4';
+robot.portname='/dev/ttyUSB0';
 robot.controller = 'MARS8';
 robot.demoname = 'robCRSdemo';
 
