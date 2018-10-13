@@ -78,7 +78,7 @@ function s = bbcomlib_serial()
 %  
 %   s = comlib_serial
 
-s.verbose = 1;
+s.verbose = 0;
 
 end % fcn
 
